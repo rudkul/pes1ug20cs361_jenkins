@@ -4,27 +4,30 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'g++ -c PES1UG20CS361.cpp'
-                sh 'g++ -o PES1UG20CS361 PES1UG20CS361.cpp'
-                echo 'Build successful'
+                sh 'g++ -o hello new.cpp'
             }
         }
+
         stage('Test') {
             steps {
-                sh './PES1UG20CS361'
-                echo 'Test was successful'
+                sh './hello'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploy steps successful'
+                echo 'deployed successfully'
             }
         }
-        
     }
-    post{
-       failure{
-      echo 'Pipelined failed'
-       }
-    }
+
+    post {
+        always {
+            script {
+                if (currentBuild.result == 'FAILURE') {
+                    echo 'pipeline failed'
+                }
+            }
+        }
+}
 }
